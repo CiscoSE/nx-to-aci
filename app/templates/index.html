@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+{% set labelclasslg = "col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label" %}
+{% set selectclass = "col-lg-4 col-md-4 col-sm-4 col-xs-4" %}
+{% set txtinputclassmd = "col-lg-6 col-md-6 col-sm-12 col-xs-12" %}
+
+{% block head %}
+{{ super() }}
+<title>ACI First Setup</title>
+{% endblock head %}
+{% block navbar %}
+
+<div class="container">
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <a href="/" class="navbar-brand">
+                    <div class="pn-noncollapse">ACI First Setup</div>
+                </a>
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar navbar-inverse"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a target="blank" data-toggle="modal" data-target="#ABOUT"
+                           href="#">About</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <img class="navbar-logo" src="/static/images/CiscoLogoWhite.png">
+
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+</div>
+{% endblock navbar %}
+
+{% block content %}
+
+<div class="container" style="max-width:1000px">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+        <form id="tool_form" action="/" class="form-horizontal">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div id="div_create_group" class="panel panel-primary">
+                    <div class="panel-heading">Insert Apic Credentials&nbsp;
+                        <span class="fa fa-info-circle" aria-hidden="true"
+                              data-toggle="popover"
+                              data-trigger="hover"
+                              title="Create Management Group"
+                              data-content="This will create a tenant in ACI">
+                                        </span>
+                        <div id="set_up_response" style="float:right;font-size:16px"></div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="{{ labelclasslg }}">APIC URL&nbsp;
+                                <span class="fa fa-info-circle" aria-hidden="true"
+                                      data-toggle="popover"
+                                      data-trigger="hover"
+                                      title="APIC URL"
+                                      data-content="APIC URL or IP">
+                                </span>
+                            </label>
+                            <div class="{{ txtinputclassmd }}">
+                                <input type="text" class="form-control" maxlength="50" id="apic_url" value=""
+                                       name="apic_url" placeholder="https://apic1.cisco.com">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="{{ labelclasslg }}">Username&nbsp;
+                                <span class="fa fa-info-circle" aria-hidden="true"
+                                      data-toggle="popover"
+                                      data-trigger="hover"
+                                      title="APIC username"
+                                      data-content="Valid username to loggin">
+                                </span>
+                            </label>
+                            <div class="{{ txtinputclassmd }}">
+                                <input type="text" class="form-control" maxlength="50" id="apic_username" value=""
+                                       name="apic_username" placeholder="Username">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="{{ labelclasslg }}">Password
+                                <span class="fa fa-info-circle" aria-hidden="true"
+                                      data-toggle="popover"
+                                      data-trigger="hover"
+                                      title="APIC password"
+                                      data-content="Valid password to loggin">
+                                </span>
+                            </label>
+                            <div class="{{ txtinputclassmd }}">
+                                <input type="password" class="form-control" maxlength="50" id="apic_password" value=""
+                                       name="apic_password" placeholder="***********">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="{{ labelclasslg }}"> Configuration
+                                <span class="panel-default" aria-hidden="true"
+                                      data-toggle="popover"
+                                      data-trigger="hover"
+                                      title="Configuration"
+                                      data-content="Paste the configuration to this box">
+                                    </span>
+                            </label>
+                            <div class="{{ txtinputclassmd }}">
+                            <textarea class="form-control" id="configuration"
+                                      name="configuration"
+                                      placeholder="Paste the configuration from your device"
+                                      style="font-family: inherit;min-height: 150px;"></textarea>
+                            </div>
+
+                        </div>
+
+
+                        <hr>
+                        <button id="btn_create_group" type="button" class="btn btn-primary" onclick="set_up()"
+                        >
+                            Set up!
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+
+</div>
+<div class="modal fade" id="ABOUT" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title" id="myModalLabel">NCA Container builder</h3>
+            </div>
+            <div class="modal-body" style="margin:15px">
+                <div class="row">
+                    <p>
+                        ACI First Setup is a solution that allows you to migrate your current nexus basic configuration
+                        (NTP, DNS, etc)
+                        to the Application Policy Infrastructure Controller. To use this tool, complete the form with
+                        the credentials
+                        and upload a nexus configuration file. The tool will search for the configurations of interest
+                        and will send
+                        that information to the APIC.
+                    </p>
+                    The application runs on top of a Flask Application and uses Javascript (Sijax) and other constructs
+                    to create a simple HTML
+                    application that can be deployed in a production environment using Apache/NGINX with WSGI.
+                </div>
+                <hr>
+
+                <div class="row">
+                    <p>
+
+                        Contacts:
+                    </p>
+                    <p>
+
+                        Santiago Flores ( sfloresk@cisco.com )
+
+                        Cesar Obediente ( cobedien@cisco.com )
+                    </p>
+
+
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <p style="margin-bottom:40px">Page built on Python Flask</p>
+                        <span style="float:right;margin:0px 20px 0px 0px;">Licensed under the Apache License.</span>
+                        <p style="margin-bottom:40px"><span style="float:right;margin:0px 20px 0px 0px;">Cisco Systems 2016.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+{% block scripts %}
+{{ super() }}
+<script>
+$().ready(function() {
+    // validations
+$("#tool_form").validate({
+	    errorClass: "error",
+        errorElement: "label",
+        rules: {
+                apic_url: {
+                    required: true
+                },
+                apic_username: {
+                    required: true
+                },
+                apic_password: {
+                    required: true
+                },
+                configuration: {
+                    required: true
+                }
+		},
+		highlight: function(element, errorClass) {
+                $(element).removeClass(errorClass);
+        }
+		});
+    });
+
+</script>
+{% endblock scripts %}
